@@ -1,0 +1,5 @@
+docker service create --name demo alpine:3.5 ping 8.8.8.8
+docker service ps demo
+docker service logs demo
+docker service rm demo
+
