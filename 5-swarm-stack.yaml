@@ -1,0 +1,11 @@
+version: '3.7'    
+
+services:
+  bb-app:
+    image: bulletinboard:1.0
+    ports:
+      - "8000:8080"    
+
+# docker stack deploy -c 5-swarm-stack.yaml demo
+# docker service ls
+# docker stack rm demo
