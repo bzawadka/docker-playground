@@ -1,0 +1,200 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 ArialMT;\f2\froman\fcharset0 Times-Roman;
+}
+{\colortbl;\red255\green255\blue255;\red11\green90\blue178;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c43922\c75294;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww15840\viewh15560\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf0 class 	- image (a binary)\
+object 	- container (\'93to spin up the container\'94)
+\fs24 \
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+
+\fs28 docker container run hello-world (image name)\
+docker container ls -a\
+\
+HOW TO ACCESS THE CONTAINER?\
+1) port mapping (port publishing)\
+\
+docker container run -p 8085:80 -d nginx\
+\
+(host_machine_port:container_port)\
+-d -> run in a background mode\
+-i interactive\
+-t terminal\
+\
+docker container run -p 8084:80 -it nginx\
+docker container run -p 8084:80 -it nginx bash (run bash shell inside nginx container)\
+\
+how to get inside running container?\
+	exec -it\
+	exec -it bash\
+\
+docker container inspect 83 (container id)\
+\
+\
+docker container run -it ubuntu
+\fs24 \
+\
+
+\fs28 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+ways to create custom image\
+1) imperative - run and make changes inside the container\
+	docker container run -it ubuntu\
+		apt-get update\
+		apt-get install -y figlet\
+		figlet happy Monday\
+\
+	docker container commit 78\
+	docker container run 156 
+\b figlet ItWorks
+\b0 \
+	\
+2) declarative\
+	dockerfile: FROM, RUN, CMD\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+QUESTIONS\
+- where on the filesystem is my image repository?\
+	docker image ls\
+	docker image inspect httpd\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\sl320\partightenfactor0
+\cf0 IMPERATIVE DOCKER IMAGE CREATION\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 publishing to DockerHub\
+\
+registry (docker_id) \\ repo_name : tag\
+\
+superdafi \\ csfiglet : 1.0\
+\
+docker image tag 15 superdafi/csfiglet:1.0\
+\pard\pardeftab720\sl320\partightenfactor0
+\cf0 docker image push superdafi/csfiglet:1.0\
+docker container run keikei274/csfiglet:1.0 figlet hello\
+docker container run superdafi/csfiglet:1.0 figlet hello\
+(attach to a running container)\
+docker container start -ai stupefied_dhawan\
+docker container logs stupefied_dhawan\
+
+\fs24 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\fs28 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\sl320\partightenfactor0
+\cf0 DECLARATIVE DOCKER IMAGE CREATION - DOCKERFILE\
+\
+FROM debian\
+RUN apt-get update\
+RUN apt-get install jdk\
+\
+FROM debian\
+RUN apt-get update\
+   && apt-get install jdk\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 COPY src_machine_dir image_dir\
+\
+ENTRYPOINT - you cannot override\
+CMD - you can override\
+\
+1) create dockerfile\
+2) docker image build\
+\
+HOW THE IMAGE IS BUILD: docker deamon runs instruction by instruction in the intermediate container, and commit after every instruction\
+\
+image is immutable -> creating of the final image requires creation of many intermediate images\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+NETWORKS\
+driver types:\
+1) bridge (only for single host communication)\
+2) overlay\
+\
+how will services communicate with each other? docker comes with DNS: containers can reach to each other by name. All containers should be part of the same network.\
+\
+1) create a network\
+2) attach/detach running containers to a network\
+\
+docker network ls\
+docker network create --driver bridge mynet\
+docker network inspect mynet\
+docker network connect mynet bd\
+\
+docker container run --net elasticnet --name elastic1 --net-alias search -d elasticsearch:5-alpine\
+docker container run --net elasticnet --name elastic2 --net-alias search -d elasticsearch:5-alpine\
+docker container run --net elasticnet alpine nslookup search\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+VOLUMES\
+\
+mechanism to store the data outside of the container -> volume\
+types\
+1) bind mounts\
+2) named volumes\
+\
+1) docker container run -V /host/mashine/volume/to/store/data/from/container\
+2) -V named_volume (docker volume create abc)\
+\
+docker container run --name ubuntu -v /Users/dafi/workspace/google-cloud-sdk:/home -it ubuntu bash\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+COMPOSE\
+\
+new CLI: docker-compose\
+up\
+down\
+yaml file\
+\
+docker-compose up (docker-compose.yaml - creates all containers and networks)\
+COMPOSE CREATES A NETWORK FOR YOU IF NOT SPECIFIED\
+
+\fs24 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\sl740\sa240\partightenfactor0
+
+\f1\b\fs64 \cf2 \expnd0\expndtw0\kerning0
+Orchestration 
+\f2\b0\fs24 \cf3 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf0 \kerning1\expnd0\expndtw0 SWARM\
+\
+docker community modes:\
+1) single host\
+2) swarm mode > docker swarm cluster with 1 node\
+\
+docker 
+\b swarm init
+\b0 \
+there is 1 master node - maintains state of the cluster\
+worker nodes wait for instructions from master node\
+\
+docker-machine - creates VMs to run more docker instances\
+docker node ls\
+docker
+\b  service
+\b0  create --replicas 5 nginx\
+docker service ps agitated_hawking\
+docker service scale agitated_hawking=15\
+\
+
+\b * creating multiple services - in compose file\
+
+\b0 \
+docker stack deploy -f \
+docker stack deploy -c example-voting-app-stack.yml hkstack\
+docker stack ls\
+docker stack ps hkstack\
+\
+
+\b * stack will create services\
+
+\b0\fs24 \
+\
+\
+}

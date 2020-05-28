@@ -1,0 +1,163 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12600\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs36 \cf0 KUBERNETES\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\sl312\slmult1\pardirnatural\partightenfactor0
+
+\fs28 \cf0 orchestrator\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 cloud providers: Google/Amazon kubernetes services\
+CLI and REST api towards the cluster -> towards the Master Node\
+\
+components (all running as containers)\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\'95	}scheduler (sends instructions\
+{\listtext	\'95	}controller\
+{\listtext	\'95	}database (ETCD, key-value) is used to store the cluster state\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+
+\b kubelet
+\b0  process \
+kubelet is kubernetes agent in worker node - waits for instructions from scheduler\
+kubelet spins up a container if instructed\
+\
+
+\b pod
+\b0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 pod is atomic unit in kubernetes \
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li720\fi-720\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	\'95	}one container per pod - by default - best practice for production\
+{\listtext	\'95	}multiple containers per pod\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 pods are being scaled, not containers\
+and usually db would not be scaled\
+if there is not heartbeat from the pod, then pod is restarted\
+\
+
+\b kube-proxy 
+\b0 \
+facilitates communication between pods\
+\
+
+\b namespaces
+\b0 \
+e.g. dev, qa, uat\
+
+\b \
+features\
+
+\b0 cpu and memory allocation, discovery, load balancing, replicas, config maps, secrets, livenessProbe (automatic restart, 1 check per pod), rolling update\
+
+\b \
+
+\b0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+IMPERATIVE
+\b \
+
+\b0 kubectl config current-context\
+kubectl get pods --namespace=kube-system\
+kubectl run --replicas 3 --image=nginx myproxy		\
+		-> create 	DEPLOYMENT (not POD)\
+		-> create 	REPLICA SET kuberenetes object\
+		-> create		PODS\
+\
+kubectl get deployment\
+kubectl get replicaset\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 kubectl get pods\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 kubectl delete pod XXX\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 kubectl delete replicaset YYY\
+kubectl delete deployment myproxy --cascade=false\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+DECLARATIVE\
+yaml files\
+kubectl apply -f 01-2-kuard-pod-health.yaml\
+kubectl describe pod kuard\
+kubectl port-forward kuard 8080:80801\
+kubectl exec -it kuard ash\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+LABELS\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+GCLOUD setup\
+\
+gcloud auth 
+\b login
+\b0 \
+gcloud config 
+\b set project
+\b0  horizontal-ion-251616\
+gcloud config set compute/zone asia-southeast1-b\
+gcloud container 
+\b clusters get-credentials
+\b0  democluster\
+kubectl config 
+\b get-contexts
+\b0 \
+kubectl config 
+\b use-context
+\b0  gke_horizontal-ion-251616_asia-southeast1-b_democluster\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+SERVICE OBJECT\
+\
+exposing deployment creates a service object\
+cluster-id (CIP) is generated once service is created\
+service object will forward the request to any of the pods\
+every POD has own IP address, but service is unaware of them\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+kubectl run alpaca-prod --image=gcr.io/kuar-demo/kuard-amd64:1 --replicas=3 --port=8080 --labels="ver=1,app=alpaca,env=prod" \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf2 kubectl 
+\b expose
+\b0  
+\b deployment
+\b0  alpaca-prod\cf0 \kerning1\expnd0\expndtw0 \
+kubectl get services\
+kubectl describe service alpaca-prod\
+kubectl edit service alpaca-prod\
+\
+PUBLISHING SERVICES - TYPE\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li720\fi-720\pardirnatural\partightenfactor0
+\ls3\ilvl0\cf0 {\listtext	\'95	}ClusterIP\
+{\listtext	\'95	}NodePort\
+{\listtext	\'95	}LoadBalancer\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+DAEMON SET\
+\
+ensures that all nodes run a copy of a pod\
+kubectl get daemonset --namespace=kube-system\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+JOBS\
+\
+Job starts a pod, which should exit with 0 status code\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+kubectl run -i oneshot --image=gcr.io/kuar-demo/kuard-amd64:1 --restart=OnFailure -- --keygen-enable --keygen-exit-on-complete --keygen-num-to-gen 10 \
+kubectl get pods --watch\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \kerning1\expnd0\expndtw0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+VOLUMES\
+1) as an administrator, provision/create volumes\
+PV PVC - p}
